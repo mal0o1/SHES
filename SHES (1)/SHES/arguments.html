@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Débat IA — Projet SHES · ISEN Méditerranée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0E0D0B;
+      --ink2: #1A1916;
+      --cream: #F5F0E8;
+      --cream2: #EDE8DF;
+      --orange: #D9571E;
+      --orange-pale: #FAE9E1;
+      --teal: #0E7C5A;
+      --teal-pale: #DDF0E9;
+      --rouge: #C0392B;
+      --rouge-pale: #FDE8E6;
+      --vert: #148A60;
+      --vert-pale: #E0F4EC;
+      --muted: #6A6760;
+      --border: rgba(14,13,11,0.1);
+      --card: #FFFFFF;
+      --r: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: var(--orange); color: #fff; }
+    body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--ink2); min-height: 100vh; overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(245,240,232,0.82);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 200;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: var(--ink2); color: var(--cream); padding: 4px 10px; border-radius: 5px; }
+    .nav-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--ink2); }
+    .nav-name em { font-style: italic; color: var(--orange); }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 7px 16px;
+      border: 1px solid var(--border); border-radius: 99px;
+      transition: all 0.2s;
+    }
+    .nav-back:hover { background: var(--cream2); color: var(--ink2); }
+    @media (max-width: 700px) { nav { padding: 0 20px; } }
+
+    /* HERO */
+    .hero {
+      background: var(--ink2); position: relative; overflow: hidden;
+      padding: 80px 48px 70px; text-align: center;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; }
+    .orb-r { width: 450px; height: 450px; background: #C0392B; opacity: 0.2; top: -150px; left: -80px; animation: or1 13s ease-in-out infinite; }
+    .orb-g { width: 400px; height: 400px; background: #148A60; opacity: 0.2; bottom: -120px; right: -60px; animation: or2 16s ease-in-out infinite; }
+    @keyframes or1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+    @keyframes or2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-40px)} }
+    .hero-noise { position: absolute; inset: 0; z-index: 1; opacity: 0.5; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E"); }
+    .hero > *:not(.orb):not(.hero-noise) { position: relative; z-index: 2; }
+    .hero-eye {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 99px;
+      padding: 7px 18px; margin-bottom: 26px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 5vw, 60px); font-weight: 900; line-height: 1.08;
+      color: #fff; margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: italic; color: var(--orange); }
+    .hero-sub { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.45); max-width: 500px; margin: 0 auto; line-height: 1.75; }
+
+    /* SCORE BAR */
+    .score-section { background: var(--card); border-bottom: 1px solid var(--border); }
+    .score-inner { max-width: 800px; margin: 0 auto; padding: 24px 24px 20px; }
+    .score-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .score-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .score-label.c { color: var(--rouge); }
+    .score-label.p { color: var(--vert); }
+    .score-label span { font-family: 'Playfair Display', serif; font-size: 24px; }
+    .score-bar { height: 6px; border-radius: 99px; background: var(--cream2); overflow: hidden; }
+    .score-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--rouge) 0%, var(--rouge) 50%, var(--vert) 50%, var(--vert) 100%);
+      background-size: 200% 100%; background-position: 50% 0;
+      transition: background-position 1.2s ease;
+    }
+    .score-sub { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+
+    /* MAIN */
+    .main { max-width: 1080px; margin: 0 auto; padding: 56px 24px 72px; }
+
+    /* DEBATE GRID */
+    .debate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    @media (max-width: 760px) { .debate-grid { grid-template-columns: 1fr; } }
+
+    .col-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px; border-radius: var(--r);
+      margin-bottom: 18px; font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 900;
+    }
+    .col-header.c { background: linear-gradient(135deg, var(--rouge-pale), #f9d8d5); color: var(--rouge); }
+    .col-header.p { background: linear-gradient(135deg, var(--vert-pale), #c8eede); color: var(--vert); }
+    .col-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .col-header.c .col-icon { background: var(--rouge); color: #fff; }
+    .col-header.p .col-icon { background: var(--vert); color: #fff; }
+
+    /* ARG CARD */
+    .arg-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden; margin-bottom: 14px;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .arg-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.07); }
+    .arg-thumb {
+      height: 80px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px;
+      font-size: 28px; position: relative; overflow: hidden;
+    }
+    .contre .arg-thumb { background: linear-gradient(135deg, var(--rouge-pale), #f5cfcc); }
+    .pour .arg-thumb { background: linear-gradient(135deg, var(--vert-pale), #b8e8d4); }
+    .arg-thumb-ph { font-size: 10px; font-style: italic; color: rgba(0,0,0,0.25); }
+    .arg-body { padding: 18px 20px 16px; }
+    .arg-tag {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 99px; margin-bottom: 8px;
+    }
+    .contre .arg-tag { background: var(--rouge-pale); color: var(--rouge); }
+    .pour .arg-tag { background: var(--vert-pale); color: var(--vert); }
+    .arg-body h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; line-height: 1.25; }
+    .arg-body .summary { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+
+    /* TOGGLE */
+    .toggle-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.04em; color: var(--muted); background: var(--cream);
+      border: 1px solid var(--border); border-radius: 99px;
+      padding: 6px 14px; cursor: pointer; transition: all 0.2s;
+    }
+    .toggle-btn:hover { background: var(--cream2); color: var(--ink2); }
+    .contre .toggle-btn.open { background: var(--rouge-pale); color: var(--rouge); border-color: rgba(192,57,43,0.2); }
+    .pour .toggle-btn.open { background: var(--vert-pale); color: var(--vert); border-color: rgba(20,138,96,0.2); }
+    .arrow { transition: transform 0.25s; display: inline-block; font-size: 10px; }
+    .toggle-btn.open .arrow { transform: rotate(90deg); }
+
+    .detail {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s ease;
+      font-size: 13px; color: var(--muted); line-height: 1.7;
+    }
+    .detail.open { max-height: 300px; padding-top: 12px; }
+    .source {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600; margin-top: 10px;
+      color: var(--muted); background: var(--cream2);
+      padding: 4px 10px; border-radius: 99px;
+    }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 32px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+    footer strong { color: var(--ink2); }
+    .footer-back {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 9px 20px;
+      border: 1px solid var(--border); border-radius: 99px;
+      background: var(--card); margin-top: 16px;
+      transition: all 0.2s;
+    }
+    .footer-back:hover { background: var(--cream2); color: var(--ink2); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s} .d5{transition-delay:.4s}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-badge">ISEN</span>
+    <span class="nav-name">Projet <em>SHES</em></span>
+  </a>
+  <a href="index.html" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="hero">
+  <div class="orb orb-r"></div>
+  <div class="orb orb-g"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-eye">⚖️ &nbsp; Débat argumenté · Éducation &amp; Numérique</div>
+  <h1>L'<em>intelligence artificielle</em><br>dans l'éducation — Pour ou contre ?</h1>
+  <p class="hero-sub">Dix arguments documentés pour nourrir votre réflexion sur l'impact de l'IA dans les apprentissages.</p>
+</div>
+
+<div class="score-section">
+  <div class="score-inner">
+    <div class="score-head">
+      <span class="score-label c"><span>5</span> Contre</span>
+      <span class="score-label p">Pour <span>5</span></span>
+    </div>
+    <div class="score-bar"><div class="score-fill" id="scoreFill"></div></div>
+    <p class="score-sub">5 arguments contre · 5 arguments pour · à vous de trancher</p>
+  </div>
+</div>
+
+<div class="main">
+  <div class="debate-grid">
+
+    <!-- ══ CONTRE ══ -->
+    <div class="contre">
+      <div class="col-header c reveal">
+        <div class="col-icon">✕</div>
+        Contre
+      </div>
+
+      <div class="arg-card reveal d1">
+        <div class="arg-thumb">🧠<span class="arg-thumb-ph">Photo · dépendance cognitive</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Cognition</span>
+          <h3>Dépendance intellectuelle</h3>
+          <p class="summary">L'IA risque d'atrophier la pensée critique en habituant les élèves à déléguer leur raisonnement.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            L'usage excessif de l'IA entraîne une perte progressive d'autonomie cognitive. Des travaux de l'Université de Cambridge montrent qu'une dépendance précoce diminue durablement les capacités de raisonnement autonome et de pensée critique — compétences fondamentales dans la vie professionnelle et citoyenne.
+            <br><span class="source">📚 University of Cambridge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d2">
+        <div class="arg-thumb">📋<span class="arg-thumb-ph">Photo · triche / ordinateur</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Évaluation</span>
+          <h3>Fraude scolaire généralisée</h3>
+          <p class="summary">L'IA rend la triche quasi indétectable, fragilisant l'équité des évaluations.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Les outils d'IA générative permettent de produire des devoirs entiers en quelques secondes. Selon Turnitin (2023), 65 % des enseignants signalent une hausse préoccupante des cas de fraude liés à ces outils, remettant en cause l'ensemble du système d'évaluation scolaire.
+            <br><span class="source">📚 Turnitin (2023)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d3">
+        <div class="arg-thumb">⚡<span class="arg-thumb-ph">Photo · data center / serveurs</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Environnement</span>
+          <h3>Appétit énergétique colossal</h3>
+          <p class="summary">Les data centers nécessaires à l'IA consomment une part croissante de l'électricité mondiale.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Les infrastructures de l'IA représentent déjà entre 1 % et 1,5 % de la consommation électrique mondiale selon l'Agence internationale de l'énergie. Avec la démocratisation des usages, cette empreinte est appelée à croître rapidement, posant de sérieuses questions de durabilité.
+            <br><span class="source">📚 International Energy Agency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d4">
+        <div class="arg-thumb">💧<span class="arg-thumb-ph">Photo · refroidissement serveurs</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Écologie</span>
+          <h3>Eau et CO₂ : l'iceberg caché</h3>
+          <p class="summary">Chaque requête complexe mobilise des ressources invisibles mais bien réelles.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Refroidir les serveurs nécessite d'immenses quantités d'eau. Des recherches de l'Université de Californie indiquent que certaines interactions complexes peuvent mobiliser plusieurs litres d'eau, auxquels s'ajoutent des émissions significatives de CO₂ difficilement compatibles avec les objectifs climatiques.
+            <br><span class="source">📚 University of California</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d5">
+        <div class="arg-thumb">🌍<span class="arg-thumb-ph">Photo · fracture numérique</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Inégalités</span>
+          <h3>Fracture numérique accrue</h3>
+          <p class="summary">L'IA risque d'avantager les déjà favorisés, creusant les inégalités mondiales d'apprentissage.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Selon l'UIT (ONU), 2,6 milliards de personnes n'ont toujours pas accès à internet. Réserver les bénéfices de l'IA aux seuls élèves connectés risque d'amplifier les inégalités éducatives existantes, aussi bien entre pays qu'au sein d'un même territoire.
+            <br><span class="source">📚 UIT (ONU)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ POUR ══ -->
+    <div class="pour">
+      <div class="col-header p reveal">
+        <div class="col-icon">✓</div>
+        Pour
+      </div>
+
+      <div class="arg-card reveal d1">
+        <div class="arg-thumb">⏱️<span class="arg-thumb-ph">Photo · étudiant productif</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Productivité</span>
+          <h3>Gain de temps considérable</h3>
+          <p class="summary">L'IA automatise les tâches répétitives, libérant du temps pour la compréhension profonde.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Selon McKinsey & Company, l'IA peut faire gagner jusqu'à 30 % de temps sur des tâches cognitives courantes. Les étudiants peuvent ainsi concentrer leur énergie sur ce qui compte vraiment : comprendre, analyser, créer et développer leur esprit critique.
+            <br><span class="source">📚 McKinsey & Company</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d2">
+        <div class="arg-thumb">🎓<span class="arg-thumb-ph">Photo · élève + tablette IA</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Apprentissage</span>
+          <h3>Tuteur personnalisé 24 h/24</h3>
+          <p class="summary">L'IA s'adapte au rythme et aux lacunes de chaque élève, sans jugement ni impatience.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Une étude de l'Université de Stanford révèle que les outils d'IA peuvent améliorer les résultats scolaires de 10 à 20 %, notamment pour les élèves qui n'ont pas accès à des cours particuliers. L'IA peut expliquer le même concept de dix façons différentes jusqu'à la compréhension.
+            <br><span class="source">📚 Stanford University</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d3">
+        <div class="arg-thumb">📖<span class="arg-thumb-ph">Photo · bibliothèque numérique</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Accessibilité</span>
+          <h3>Accès universel au savoir</h3>
+          <p class="summary">L'information devient instantanée, personnalisée et accessible à tous les niveaux.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Selon l'OCDE, plus de 90 % des étudiants utilisent déjà internet pour apprendre. L'IA rend cet accès encore plus rapide, simple et personnalisé à chaque profil d'apprentissage, synthétisant instantanément une immense quantité d'informations adaptées au niveau de l'utilisateur.
+            <br><span class="source">📚 OCDE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d4">
+        <div class="arg-thumb">💰<span class="arg-thumb-ph">Photo · coût éducation</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Économie</span>
+          <h3>Éducation moins chère</h3>
+          <p class="summary">L'IA peut remplacer certains services coûteux et rendre l'apprentissage plus accessible financièrement.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Les cours particuliers restent inaccessibles pour de nombreuses familles. D'après HolonIQ, les technologies éducatives pourraient permettre d'économiser des dizaines de milliards à l'échelle mondiale en rendant un soutien scolaire de qualité accessible à tous, quelle que soit la situation financière.
+            <br><span class="source">📚 HolonIQ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arg-card reveal d5">
+        <div class="arg-thumb">🏫<span class="arg-thumb-ph">Photo · classe innovante</span></div>
+        <div class="arg-body">
+          <span class="arg-tag">Pédagogie</span>
+          <h3>Révolution pédagogique</h3>
+          <p class="summary">L'IA modernise profondément les méthodes d'enseignement et renforce l'engagement des élèves.</p>
+          <button class="toggle-btn" onclick="toggle(this)"><span class="arrow">▶</span> En savoir plus</button>
+          <div class="detail">
+            Selon l'UNESCO, plus de 60 % des enseignants estiment que les outils numériques améliorent l'engagement des élèves. L'IA permet un apprentissage adaptatif calibré sur le niveau de chaque élève en temps réel, transformant la relation entre enseignant, élève et savoir.
+            <br><span class="source">📚 UNESCO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>Sources : University of Cambridge · Turnitin · IEA · University of California · UIT · McKinsey · Stanford · OCDE · HolonIQ · UNESCO</p>
+  <p style="margin-top:6px;opacity:.55;">Document pédagogique · Projet <strong>SHES</strong> · ISEN Méditerranée · 2026</p>
+  <a href="index.html" class="footer-back">← Retour à l'accueil</a>
+</footer>
+
+<script>
+  function toggle(btn) {
+    const detail = btn.nextElementSibling;
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Animate score bar
+  setTimeout(() => {
+    document.getElementById('scoreFill').style.backgroundPosition = '50% 0';
+  }, 600);
+</script>
+</body>
+</html>
