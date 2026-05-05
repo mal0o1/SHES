@@ -154,13 +154,20 @@
       background: var(--ink2); border-radius: var(--r);
       padding: 56px 52px; text-align: center; position: relative; overflow: hidden;
     }
+    .prob-card-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      opacity: 0.35;
+      pointer-events: none;
+    }
     .prob-card::before {
       content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
       width: 500px; height: 500px; border-radius: 50%;
       background: radial-gradient(circle, rgba(217,87,30,0.2) 0%, transparent 65%);
       pointer-events: none;
     }
-    .prob-card > * { position: relative; z-index: 1; }
+    .prob-card > *:not(.prob-card-bg) { position: relative; z-index: 1; }
     .prob-chip {
       display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
       color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1);
@@ -341,6 +348,10 @@
   <section class="prob-wrap reveal">
     <div class="sec-label">Problématique centrale</div>
     <div class="prob-card">
+
+      <!-- ✏️ Remplace le src="" par le lien de ton image -->
+      <img src="https://www.livementor.com/wpapp/uploads/2025/05/adobestock-1194615198-min-1646x1080.jpeg" alt="image ia" class="prob-card-bg" />
+
       <span class="prob-chip">Question de débat</span>
       <h2>L'IA aide-t-elle les étudiants<br>à <em>mieux travailler ?</em></h2>
       <div class="prob-bar"></div>
